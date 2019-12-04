@@ -1,15 +1,32 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-
+import App from "../App"
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'App',
+      redirect:"/home",
+      component: App,
+      children:[
+        {
+          path: '/home',
+          name: 'Home',
+          component: (r) =>require.ensure([],()=>r(require("../page/home")),"home"),
+        },
+        {
+          path: '/city/:id',
+          name: 'City',
+          component: (r) =>require.ensure([],()=>r(require("../page/city/city")),"city"),
+        },
+        {
+          path: '/msite',
+          name: 'Msite',
+          component: (r) =>require.ensure([],()=>r(require("../page/msite/msite")),"msite"),
+        },
+      ]
     }
   ]
 })
