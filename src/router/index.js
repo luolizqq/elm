@@ -26,6 +26,21 @@ export default new Router({
           name: 'Msite',
           component: (r) =>require.ensure([],()=>r(require("../page/msite/msite")),"msite"),
         },
+        {
+          path: '/login',
+          name: 'Login',
+          component: (r) =>require.ensure([],()=>r(require("../page/login")),"login"),
+        },
+        {
+          path: '/profile',
+          name: 'Profile',
+          component: (r) =>require.ensure([],()=>r(require("../page/profile")),"profile"),
+        },
+        {
+          path: '/search',
+          name: 'Search',
+          component: (r) =>require.ensure([],()=>r(require("../page/search")),"search"),
+        },
       ]
     }
   ]

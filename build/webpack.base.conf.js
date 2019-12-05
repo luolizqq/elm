@@ -30,7 +30,9 @@ module.exports = {
       'components':resolve("src/components"),
       'service':resolve("src/service"),
       'assets':resolve("src/assets"),
-      'utils':resolve('src/utils')
+      'utils':resolve('src/utils'),
+      'style':resolve('src/style'),
+      'plugins':resolve('src/plugins')
     }
   },
   module: {
@@ -73,6 +75,10 @@ module.exports = {
         test: /\.less$/,
         loader: 'style-loader!css-loader!less-loader'
       },
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'sass']
+      }
     ]
   },
   node: {
