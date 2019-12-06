@@ -42,3 +42,9 @@ export function getIndexEntry(geohash){
         group_type:1
     })
 }
+export function getShops(latitude,longitude){
+    return fetch(`/shopping/restaurants`,{
+        latitude,
+        longitude
+    })
+}

@@ -73,7 +73,7 @@ mounted() {
         height:2rem;
         background:#fff;
         border-top:1px solid #ccc;
-        position: absolute;
+        position: fixed;
         bottom:0;
         width:100%;
         ul{
