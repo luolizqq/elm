@@ -1,4 +1,5 @@
 import fetch from "./fetch";
+import { getStore } from "../utils";
 //home
 export function getCity(type){
     return fetch("/v1/cities?type="+type)
@@ -24,5 +25,26 @@ export function restaurants(geohash,group_type){
     return fetch('/v1/shopping/restaurants',{
         geohash,
         group_type,
+    })
+}
+export function getUserInfo(){
+    return fetch('/v1/user',{
+       user_id:getStore("user_id")
+    })
+}
+export function getCityAll(geohash){
+    return fetch(`/v2/pois/${geohash}`)
+}
+
+export function getIndexEntry(geohash){
+    return fetch(`/v2/index_entry`,{
+        geohash,
+        group_type:1
+    })
+}
+export function getShops(latitude,longitude){
+    return fetch(`/shopping/restaurants`,{
+        latitude,
+        longitude
     })
 }

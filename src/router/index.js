@@ -25,6 +25,27 @@ export default new Router({
           path: '/msite',
           name: 'Msite',
           component: (r) =>require.ensure([],()=>r(require("../page/msite/msite")),"msite"),
+          meta:{keepAlive:true}
+        },
+        {
+          path: '/login',
+          name: 'Login',
+          component: (r) =>require.ensure([],()=>r(require("../page/login")),"login"),
+        },
+        {
+          path: '/profile',
+          name: 'Profile',
+          component: (r) =>require.ensure([],()=>r(require("../page/profile")),"profile"),
+        },
+        {
+          path: '/search',
+          name: 'Search',
+          component: (r) =>require.ensure([],()=>r(require("../page/search")),"search"),
+        },
+        {
+          path: '/food',
+          name: 'Food',
+          component: (r) =>require.ensure([],()=>r(require("../page/food")),"food"),
         },
       ]
     }

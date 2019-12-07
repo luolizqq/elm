@@ -1,0 +1,32 @@
+@mixin atcenter {
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+}
+@mixin alcenter {
+    position: absolute;
+    left:50%;
+    transform: translateX(-50%);
+}
+@mixin acenter {
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+@mixin tvc {
+    // height:100%;
+    // line-height: 100%;
+    font:100%/1;
+}
+    .clearfix:after {
+        content: ".";
+        display: block;
+        height: 0;
+        font-size: 0;
+        clear: both;
+        visibility: hidden;
+        }
+        .clearfix {
+        zoom: 1;
+        }

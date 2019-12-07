@@ -11,7 +11,10 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/v1/':{target:'http://elm.cangdu.org',changeOrigin:true}
+      '/v1/':{target:'http://elm.cangdu.org',changeOrigin:true},
+      '/v2/':{target:'http://elm.cangdu.org',changeOrigin:true},
+      '/shopping/':{target:'http://elm.cangdu.org',changeOrigin:true}
+      
     },
 
     // Various Dev Server settings

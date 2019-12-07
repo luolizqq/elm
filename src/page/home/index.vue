@@ -1,8 +1,9 @@
 <!--  -->
 <template>
 <div class=''>
-    <header-top></header-top>
-    
+<header-top :showUser ="true" >
+    <div slot="logo" @click="reload" class="logo">ele.me</div>
+</header-top>
     <div>
         <div class="locate_city">
             <div><span>当前定位城市：</span><span>定位不准时,请在城市列表中选择</span></div>
@@ -22,7 +23,7 @@
             <ul>
                 <li v-for='(item,index) in groupSortCities' :key="index">
                     {{index}}
-                    <router-link v-for="city in item" :key="city.name" :to="'/city/'+city.id">{{city.name}}</router-link>
+                    <router-link v-for="city in item" :key="city.longitude" :to="'/city/'+city.id">{{city.name}}</router-link>
                 </li>
             </ul>
         </div>
@@ -58,6 +59,9 @@ computed: {
 },
 watch: {},
 methods: {
+    reload(){
+        window.location.reload();
+    },
  guessCity(){
        getCity('guess').then((res)=>{
           this.locateCity = res
@@ -87,8 +91,13 @@ components:{
 }
 }
 </script>
-<style lang='less' scoped>
-
+<style lang='scss' scoped>
+@import "style/scss.scss";
+    .logo{
+        position: absolute;
+        left:0.5rem;
+        color:#fff;
+    }
 </style>
 
 

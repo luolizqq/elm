@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+        <router-view v-if='$route.meta.keepAlive'/>
+    </keep-alive>
+      <router-view v-if='!$route.meta.keepAlive'></router-view>
   </div>
 </template>
 
@@ -11,6 +14,8 @@ export default {
 </script>
 
 <style>
+@import 'style/reset.css';
+@import 'style/global.css';
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
