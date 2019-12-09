@@ -48,3 +48,9 @@ export function getShops(latitude,longitude){
         longitude
     })
 }
+export function getCategories(latitude,longitude){
+    return fetch(`/shopping/v2/restaurant/category`,{
+        latitude,
+        longitude
+    })
+}
