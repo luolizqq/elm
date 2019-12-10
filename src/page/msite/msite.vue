@@ -40,14 +40,12 @@
       <div class="swiper-pagination"></div>
     </div>
     <div class="food_list">
-        <div>附近商家</div>
-        <ul>
-            <li is='shop-list' v-for='(item,index) in shoplist' :key="index">
-                {{item.name}}
-            </li>
-        </ul>
+      <div>附近商家</div>
+      <ul>
+        <li is="shop-list" v-for="(item,index) in shoplist" :key="index">{{item.name}}</li>
+      </ul>
     </div>
-    {{shoplist.length}}
+    <shop-list></shop-list>
     <footer-guide></footer-guide>
   </div>
 </template>
@@ -56,40 +54,64 @@
 import headerTop from "components/header/header";
 import footerGuide from "components/footer/footerGuide";
 import shopList from "components/common/shoplist";
-import { getCityAll, getIndexEntry,getShops } from "service/getData";
-import log from "../../../node_modules_/loglevel";
+import { getCityAll, getIndexEntry, getCity} from "service/getData";
 import Swiper from "swiper";
 import "../../style/swiper.min.css";
-import { mapState } from "vuex";
+import { mapState,mapMutations } from "vuex";
 export default {
   components: {},
   data() {
     return {
       cityAll: {},
+      geohash:"",
       indexEntries: [],
       shoplist:[],
       imgBaseUrl: "https://fuss10.elemecdn.com" //图片域名地址
     };
   },
-  computed: {
-    ...mapState(["geohash", "longitude", "latitude"])
+  beforeRouteEnter(to,from,next){
+    if(from.name==="City"){
+      to.meta.isBack = true;
+    }
+    next();
+  },
+  async activated(){
+    if(this.$route.meta.isBack){
+     
+      if(!this.$route.query.geohash){
+      const cityInfo = await  getCity("guess");
+      
+      this.saveCityInfo(cityInfo)
+      this.geohash= cityInfo.latitude+','+cityInfo.longitude;
+    }else{
+      this.geohash = this.$route.query.geohash;
+    }
+    getCityAll(this.geohash).then(res=>{
+        this.cityAll = res;
+        this.saveAddress(res);
+    })
+
+      this.renderSwiper();
+    }
+  },
+  async beforeMount(){
+    console.log("gggg",this.geohash)
+   if(!this.$route.query.geohash){
+      const cityInfo = await  getCity("guess");
+      
+      this.saveCityInfo(cityInfo)
+      this.geohash= cityInfo.latitude+','+cityInfo.longitude;
+    }else{
+      this.geohash = this.$route.query.geohash;
+    }
+    
+    getCityAll(this.geohash).then(res=>{
+        this.cityAll = res;
+        this.saveAddress(res);
+    })
   },
   methods: {
-    getCityAll() {
-      getCityAll(this.$route.query.geohash).then(res => {
-        this.cityAll = res;
-      });
-    },
-    getIndexEntry() {
-      getIndexEntry(this.geohash).then(res => {
-        const groupNum = Math.ceil(res.length / 8);
-        for (var i = 0; i < groupNum; i++) {
-          const slideGroup = res.slice(i * 8, (i + 1) * 8);
-          this.indexEntries.push(slideGroup);
-          this.$nextTick(this.swiperInit);
-        }
-      });
-    },
+    ...mapMutations({saveCityInfo:"SAVE_CITYINFO",saveAddress:"SAVE_ADDRESS"}),
     swiperInit() {
       var mySwiper = new Swiper(".swiper-container", {
         pagination: {
@@ -102,18 +124,34 @@ export default {
         link.split("=")[1].replace("&target_name", "")
       );
     },
-    getShops(){
-        getShops(this.latitude,this.longitude).then((res)=>{
-            this.shoplist = res;
-        })
+    renderSwiper(){
+      console.log("222",this.geohash)
+      getIndexEntry(this.geohash).then(res => {
+        const groupNum = Math.ceil(res.length / 8);
+        this.indexEntries=[];
+        for (var i = 0; i < groupNum; i++) {
+          const slideGroup = res.slice(i * 8, (i + 1) * 8);
+          this.indexEntries.push(slideGroup);
+        }
+      }).then((res)=>{
+        //凡是涉及到dom操作的应该写在mounted里面
+        this.swiperInit();
+      });
     }
   },
-  created() {
-    this.getCityAll();
-    this.getIndexEntry();
-    this.getShops();
-  },
+  // created() {
+  //   getIndexEntry(this.geohash).then(res => {
+  //       const groupNum = Math.ceil(res.length / 8);
+  //       for (var i = 0; i < groupNum; i++) {
+  //         const slideGroup = res.slice(i * 8, (i + 1) * 8);
+  //         this.indexEntries.push(slideGroup);
+  //         this.$nextTick(this.swiperInit);
+  //       }
+  //     });
+  // },
   mounted() {
+    this.renderSwiper();
+
     // this.swiperInit();
   },
   components: {

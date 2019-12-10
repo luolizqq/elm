@@ -10,7 +10,7 @@
             </div>
             <div>外卖</div>
         </li>
-        <li @click ="gotoPage({path:`/search${geohash}`})">
+        <li @click ="gotoPage({path:`/search?${geohash}`})">
             <div><svg class="icon" aria-hidden="true">
                     <use :xlink:href="$route.path.indexOf('search')>0 ? '#icon-sousuo-copy':'#icon-sousuo'"></use>
                 </svg></div>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import "assets/iconfont.js";
+
 import {mapState} from "vuex";
 export default { 
 components: {},

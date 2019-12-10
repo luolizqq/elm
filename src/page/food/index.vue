@@ -1,17 +1,24 @@
 <!--  -->
 <template>
 <div class=''>
-    food
+     <header-top :goBack="true" headTitle="准时达" />
+     <div class="sort">
+         <ul></ul>
+     </div>
 </div>
 </template>
 
 <script>
-
+import headerTop from "components/header/header";
+import shopList from "components/common/shoplist";
 export default {
-components: {},
+components: {
+    headerTop,
+    shopList
+},
 data() {
 return {
-
+    
 };
 },
 computed: {},

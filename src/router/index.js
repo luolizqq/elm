@@ -25,7 +25,10 @@ export default new Router({
           path: '/msite',
           name: 'Msite',
           component: (r) =>require.ensure([],()=>r(require("../page/msite/msite")),"msite"),
-          meta:{keepAlive:true}
+          meta:{
+            keepAlive:true,
+            isBack:false
+          }
         },
         {
           path: '/login',
