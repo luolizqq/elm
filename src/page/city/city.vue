@@ -1,12 +1,7 @@
 <!--  -->
 <template>
 <div class=''>
-<<<<<<< HEAD
-    <header-top></header-top>
-    
-=======
     <header-top :go-back='true' :head-title='this.currentCityDetail.name'></header-top>
->>>>>>> 70ed6871d1aca6656bf213f1b847202f5eecc51b
     <div class="form">
         <input type="text" v-model="address" placeholder="输入学校、商务楼、地址">
         <input type="submit" value="提交" @click="searchCity">
@@ -73,7 +68,6 @@ methods: {
     getHistoryList(){
         let history = getStore("historyList");
         history ? history = JSON.parse(history) :history=[];
-        console.log("history",history)
         this.placeList = history;
     },
     nextPage(item){
