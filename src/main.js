@@ -6,6 +6,7 @@ import router from './router'
 import st from "./store";
 import Vuex from "vuex";
 import createLogger from 'vuex/dist/logger'
+import "assets/iconfont.js";
 Vue.config.productionTip = false
 Vue.use(Vuex);
 /* eslint-disable no-new */

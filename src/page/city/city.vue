@@ -68,7 +68,6 @@ methods: {
     getHistoryList(){
         let history = getStore("historyList");
         history ? history = JSON.parse(history) :history=[];
-        console.log("history",history)
         this.placeList = history;
     },
     nextPage(item){
