@@ -42,6 +42,9 @@
         </div>
       </div>
     </div>
+    <div class="mask" v-show="activeType!==''">
+
+    </div>
     <div class="choice">
       <transition
         duration="100"
@@ -302,14 +305,25 @@ html::-webkit-scrollbar {
       }
     }
   }
+  .mask{
+    position: absolute;
+    z-index:1;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    background:rgba(0,0,0,0.3)
+  }
   .choice {
     font-size: 0.55rem;
-
+    position: relative;
+    z-index:2;
+    background:#fff;
     .categoryList {
       height: 16rem;
       width: 16rem;
       position: relative;
-      z-index: 1;
+      z-index: 2;
       .activeItem {
         background: #fff;
       }
@@ -349,7 +363,10 @@ html::-webkit-scrollbar {
       }
     }
     .sort_methods {
+      position: relative;
+    z-index:2;
       color: #666;
+      background:#fff;
       .sort_icon {
         width: 1em;
         fill: currentColor;
@@ -371,6 +388,7 @@ html::-webkit-scrollbar {
     }
     .filterItem {
       padding-left: 0.5rem;
+      background:#fff;
       .filter_icon {
         width: 1.4em;
         height:1.4rem;
