@@ -55,8 +55,9 @@ props:['goBack','headTitle','showUser']
     .wrapper{
         height:2rem;
         background:#3190e8;
-        position: relative;
+        position: fixed;
         z-index: 100;
+        width:100%;
         .goBack{
             @include atcenter;
             left:0.5rem;

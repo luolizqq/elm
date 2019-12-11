@@ -14,10 +14,8 @@
                 </div>
             </router-link>
         </ul>
-        
     </div>
 </template>
-
 <script>
 import { getCityAll, getIndexEntry,getShops ,getCity} from "service/getData";
 import { mapState } from "vuex";
@@ -33,7 +31,6 @@ imgBaseUrl: "http://elm.cangdu.org/img/"
 computed: {
     ...mapState(["geohash", "longitude", "latitude"])
 },
-
 watch: {},
 methods: {
     getShops(){
@@ -50,8 +47,7 @@ mounted() {
 },
 components:{
     ratingStar
-}
-}
+}}
 </script>
 <style lang='scss' scoped>
     .wrapper{

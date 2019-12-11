@@ -46,13 +46,11 @@
 
     </div>
     <div class="choice">
-      <transition
-        duration="100"
-        enter-active-class="animated slideInDown"
-        mode="in-out"
-        leave-active-class="animated slideOutUp"
-      >
-        <div class="categoryList" v-if="activeType=='food'">
+      <transition  duration="1000" 
+      mode="in-out"
+      enter-active-class="animated slideInDown"
+       leave-active-class="animated slideOutUp">
+        <div class="categoryList" key="category" v-if="activeType=='food'">
           <div class="leftFir">
             <div
               v-for="item in this.categories"
@@ -75,13 +73,11 @@
           </div>
         </div>
       </transition>
-      <transition
-        duration="100"
-        enter-active-class="animated slideInDown"
-        mode="in-out"
-        leave-active-class="animated slideOutUp"
-      >
-        <div class="sort_methods" v-if="activeType =='sort'">
+      <transition  duration="1000" 
+       mode="in-out"
+      enter-active-class="animated slideInDown"
+       leave-active-class="animated slideOutUp">
+        <div class="sort_methods" v-if="activeType =='sort'" key="methods">
           <div class="sortItem" :class="{active:sort_method=='0'}" @click="changeSortMethod('0')">
             智能排序
             <svg class="sort_icon" v-if="sort_method=='0'" aria-hidden="true">
@@ -120,12 +116,11 @@
           </div>
         </div>
       </transition>
-      <transition 
-        duration="100"
-        enter-active-class="animated slideInDown"
+       <transition  duration="1000" 
         mode="in-out"
-        leave-active-class="animated slideOutUp">
-        <div class="filterItem" v-if="activeType=='filter'">
+      enter-active-class="animated slideInDown"
+       leave-active-class="animated slideOutUp">
+        <div class="filterItem" v-if="activeType=='filter'" key="filterItem">
           <div class="sendMethod">
             <h5>配送方式</h5>
             <div class="fengniao_send option" @click="selectFilter('fengniao')">
@@ -181,8 +176,6 @@
                 <span>开发票</span>
               </li>
             </ul>
-          
-          
           <div class="btn clearfix">
             <div class="removeAll button" @click="clearAll">清空</div>
             <div class="confirm button" @click="confirm">确认</div>
@@ -191,6 +184,7 @@
         </div>
       </transition>
     </div>
+     <shop-list class="shoplist"  :geohash="geohash"></shop-list>
   </div>
 </template>
 
@@ -216,7 +210,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["latitude", "longitude"])
+    ...mapState(["latitude", "longitude","geohash"])
   },
   watch: {},
   methods: {
@@ -264,12 +258,30 @@ html::-webkit-scrollbar {
 .active {
   color: #3190e8 !important;
 }
+.slide-fade-enter-active{
+  transition:all 0.3s ease;
+}
+.slide-fade-leave-active{
+   transition:all 0.2s ease;
+}
+//.slide-fade-enter是刚要进入的起始点，.slide-fade-leave-to是离开的终点
+.slide-fade-enter,.slide-fade-leave-to{
+  opacity: 0;
+  transform: translateY(-100%);
+}
 .food {
+  overflow: hidden;
+  // &:before{
+  //   content:"";
+  //   display: table;
+  // }
   .group {
     height: 1.6rem;
+    width:100%;
     border-bottom: 1px solid #ddd;
-    position: relative;
+    position: fixed;
     z-index: 100;
+    top:2rem;
     background: #fff;
     font-size: 0.55rem;
     box-sizing: border-box;
@@ -306,7 +318,7 @@ html::-webkit-scrollbar {
     }
   }
   .mask{
-    position: absolute;
+    position: fixed;
     z-index:1;
     width:100%;
     height:100%;
@@ -316,14 +328,14 @@ html::-webkit-scrollbar {
   }
   .choice {
     font-size: 0.55rem;
-    position: relative;
+    position: fixed;
+    top:3.6rem;
     z-index:2;
-    background:#fff;
+    // background:#fff;
     .categoryList {
       height: 16rem;
       width: 16rem;
       position: relative;
-      z-index: 2;
       .activeItem {
         background: #fff;
       }
@@ -363,8 +375,8 @@ html::-webkit-scrollbar {
       }
     }
     .sort_methods {
-      position: relative;
-    z-index:2;
+       position: fixed;
+      top:3.6rem;
       color: #666;
       background:#fff;
       .sort_icon {
@@ -387,8 +399,11 @@ html::-webkit-scrollbar {
       }
     }
     .filterItem {
+       position: fixed;
+      top:3.6rem;
       padding-left: 0.5rem;
       background:#fff;
+
       .filter_icon {
         width: 1.4em;
         height:1.4rem;
@@ -442,6 +457,9 @@ html::-webkit-scrollbar {
         }
       }
     }
+  }
+  .shoplist{
+    margin-top:3.6rem;
   }
 }
 </style>
