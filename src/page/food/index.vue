@@ -46,10 +46,7 @@
 
     </div>
     <div class="choice">
-      <transition  duration="1000" 
-      mode="in-out"
-      enter-active-class="animated slideInDown"
-       leave-active-class="animated slideOutUp">
+      <transition  name="slide-fade">
         <div class="categoryList" key="category" v-if="activeType=='food'">
           <div class="leftFir">
             <div
@@ -68,58 +65,52 @@
               @click="selectSecondCate(item.name)"
               v-for="item in curParentCate.sub_categories"
               :key="item.name"
-              :class="{active:curSecondCate==item.name}"
+              :class="{active:categoryIds==item.name}"
             >{{item.name}}</div>
           </div>
         </div>
       </transition>
-      <transition  duration="1000" 
-       mode="in-out"
-      enter-active-class="animated slideInDown"
-       leave-active-class="animated slideOutUp">
+      <transition  name="slide-fade">
         <div class="sort_methods" v-if="activeType =='sort'" key="methods">
-          <div class="sortItem" :class="{active:sort_method=='0'}" @click="changeSortMethod('0')">
+          <div class="sortItem" :class="{active:sortByType=='0'}" @click="changeSortMethod('0')">
             智能排序
-            <svg class="sort_icon" v-if="sort_method=='0'" aria-hidden="true">
+            <svg class="sort_icon" v-if="sortByType=='0'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
           </div>
-          <div class="sortItem" :class="{active:sort_method=='1'}" @click="changeSortMethod('1')">
+          <div class="sortItem" :class="{active:sortByType=='1'}" @click="changeSortMethod('1')">
             距离最近
-            <svg class="sort_icon" v-if="sort_method=='1'" aria-hidden="true">
+            <svg class="sort_icon" v-if="sortByType=='1'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
           </div>
-          <div class="sortItem" :class="{active:sort_method=='2'}" @click="changeSortMethod('2')">
+          <div class="sortItem" :class="{active:sortByType=='2'}" @click="changeSortMethod('2')">
             销量最高
-            <svg class="sort_icon" v-if="sort_method=='2'" aria-hidden="true">
+            <svg class="sort_icon" v-if="sortByType=='2'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
           </div>
-          <div class="sortItem" :class="{active:sort_method=='3'}" @click="changeSortMethod('3')">
+          <div class="sortItem" :class="{active:sortByType=='3'}" @click="changeSortMethod('3')">
             起送价最低
-            <svg class="sort_icon" v-if="sort_method=='3'" aria-hidden="true">
+            <svg class="sort_icon" v-if="sortByType=='3'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
           </div>
-          <div class="sortItem" :class="{active:sort_method=='4'}" @click="changeSortMethod('4')">
+          <div class="sortItem" :class="{active:sortByType=='4'}" @click="changeSortMethod('4')">
             配送速度最快
-            <svg class="sort_icon" v-if="sort_method=='4'" aria-hidden="true">
+            <svg class="sort_icon" v-if="sortByType=='4'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
           </div>
-          <div class="sortItem" :class="{active:sort_method=='5'}" @click="changeSortMethod('5')">
+          <div class="sortItem" :class="{active:sortByType=='5'}" @click="changeSortMethod('5')">
             评分最高
-            <svg class="sort_icon" v-if="sort_method=='5'" aria-hidden="true">
+            <svg class="sort_icon" v-if="sortByType=='5'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
           </div>
         </div>
       </transition>
-       <transition  duration="1000" 
-        mode="in-out"
-      enter-active-class="animated slideInDown"
-       leave-active-class="animated slideOutUp">
+       <transition name="slide-fade">
         <div class="filterItem" v-if="activeType=='filter'" key="filterItem">
           <div class="sendMethod">
             <h5>配送方式</h5>
@@ -184,7 +175,7 @@
         </div>
       </transition>
     </div>
-     <shop-list class="shoplist"  :geohash="geohash"></shop-list>
+     <shop-list class="shoplist" :categoryIds="categoryIds" :sortByType="sortByType" :deliveryMode="deliveryMode" :geohash="geohash"></shop-list>
   </div>
 </template>
 
@@ -205,8 +196,10 @@ export default {
       activeType: "",
       curParentCate: {},
       sort_method: "1",
-      curSecondCate: "",
       filterSelected:[],
+      deliveryMode:[],
+      categoryIds:"",
+      sortByType:""
     };
   },
   computed: {
@@ -222,17 +215,15 @@ export default {
       }
     },
     changeSortMethod(num) {
-      this.sort_method = num;
+      this.sortByType = num;
       this.activeType = "";
     },
     selectSecondCate(name) {
       this.activeType = "";
-      this.curSecondCate = name;
+      this.categoryIds = name;
     },
     selectFilter(type){
-      console.log(123,type,this.filterSelected)
       let filterSelected = [...this.filterSelected];
-      console.log("有没有",filterSelected,type,filterSelected.indexOf(type)>-1)
       filterSelected.indexOf(type)>-1 ? filterSelected = filterSelected.filter(item =>item !=type) :filterSelected.push(type);
       this.filterSelected = filterSelected;  
     },
@@ -240,7 +231,8 @@ export default {
       this.filterSelected =[];
     },
     confirm(){
-      this.activeType =""
+      this.activeType ="";
+      this.deliveryMode = this.filterSelected;
     }
   },
   created() {

@@ -14,29 +14,45 @@
                 </div>
             </router-link>
         </ul>
+        <transition name="loading">
+            <loading v-if="loading"></loading>
+        </transition>
+        
     </div>
 </template>
 <script>
 import { getCityAll, getIndexEntry,getShops ,getCity} from "service/getData";
 import { mapState } from "vuex";
 import ratingStar from "components/ratingStar/";
+import loading from "components/common/loading/loading";
 export default {
 components: {},
 data() {
 return {
 shoplist:[],
-imgBaseUrl: "http://elm.cangdu.org/img/"
+imgBaseUrl: "http://elm.cangdu.org/img/",
+loading:true
 };
 },
 computed: {
     ...mapState(["geohash", "longitude", "latitude"])
 },
 watch: {},
+props:[
+    "deliveryMode",
+    "sortByType",
+    "categoryIds"
+],
 methods: {
     getShops(){
+        this.loading=true;
         getShops(this.latitude,this.longitude).then((res)=>{
             this.shoplist = res;
-        })
+            this.loading=false;
+        },(err=>{
+            console.log(err);
+            this.loading= false;
+        }))
     }
 },
 created() {
@@ -46,10 +62,30 @@ mounted() {
 
 },
 components:{
-    ratingStar
+    ratingStar,
+    loading
+},
+watch:{
+ sortByType(){
+     this.getShops();
+ },
+ categoryIds(){
+     this.getShops();
+ },
+ deliveryMode:{
+     handler:function(){
+     this.getShops();},
+    deep:true
+ }  
 }}
 </script>
 <style lang='scss' scoped>
+    .loading-enter-active,.loading-leave-active{
+        transition:all 0.3s ease;
+    }
+    .loading-enter,.laoding-leave-to{
+        opacity: 0;
+    }
     .wrapper{
         height:5.5rem;
         padding:0.7rem 0.4rem;
