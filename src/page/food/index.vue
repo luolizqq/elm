@@ -1,12 +1,12 @@
 <!--  -->
 <template>
   <div class="food">
-    <header-top headTitle="美食" :goBack="true"></header-top>
+    <header-top :headTitle="headTitle" :goBack="true"></header-top>
     <div class="group">
       <div class="sort_item" :class="{'active-item':activeType=='food'}">
         <div class="sort_container category">
-          <div class="sort_item_border title" @click="changeSortItem('food')">
-            美食
+          <div  class="sort_item_border title" @click="changeActiveType('food')">
+            {{foodTitle}}
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-jiantou1" />
             </svg>
@@ -16,7 +16,7 @@
       <div
         class="sort_item"
         :class="{'active-item':activeType=='sort'}"
-        @click="changeSortItem('sort')"
+        @click="changeActiveType('sort')"
       >
         <div class="sort_container sort">
           <div class="sort_item_border title">
@@ -30,7 +30,7 @@
       <div
         class="sort_item"
         :class="{'active-item':activeType=='filter'}"
-        @click="changeSortItem('filter')"
+        @click="changeActiveType('filter')"
       >
         <div class="sort_container filter">
           <div class="sort_item_border title">
@@ -47,143 +47,108 @@
     </div>
     <div class="choice">
       <transition  name="slide-fade">
-        <div class="categoryList" key="category" v-if="activeType=='food'">
+        <div class="categoryList"  v-if="activeType=='food'">
           <div class="leftFir">
             <div
-              v-for="item in this.categories"
+              v-for="(item,index) in this.categories"
               :key="item.id"
-              @click="curParentCate=item"
-              :class="{activeItem:curParentCate===item}"
+              @click="selectFirstCate(item.id,index)"
+              :class="{activeItem:restaurant_category_id===item.id}"
             >
               {{item.name}}
               <span class="count">{{item.count}}</span>
-              <span>></span>
+              <span v-if="index">></span>
             </div>
           </div>
-          <div class="rightSecond">
+          <div class="rightSecond" v-if="categoryDetail">
             <div
-              @click="selectSecondCate(item.name)"
-              v-for="item in curParentCate.sub_categories"
+              @click="selectSecondCate(item.id,item.name)"
+              v-for="(item,index) in categoryDetail "
               :key="item.name"
-              :class="{active:categoryIds==item.name}"
+              :class="{active:restaurant_category_ids==item.id}"
             >{{item.name}}</div>
           </div>
         </div>
       </transition>
       <transition  name="slide-fade">
-        <div class="sort_methods" v-if="activeType =='sort'" key="methods">
-          <div class="sortItem" :class="{active:sortByType=='0'}" @click="changeSortMethod('0')">
+        <ul class="sort_methods" v-if="activeType =='sort'" @click="changeSortMethod">
+          <li class="sortItem" :class="{active:sortByType=='0'}" data-code="0">
             智能排序
-            <svg class="sort_icon" v-if="sortByType=='0'" aria-hidden="true">
+            <svg class="sort_icon" v-if="sortByType=='0'" aria-hidden="true" >
               <use xlink:href="#icon-duihao-copy" />
             </svg>
-          </div>
-          <div class="sortItem" :class="{active:sortByType=='1'}" @click="changeSortMethod('1')">
+          </li>
+          <li class="sortItem" :class="{active:sortByType=='1'}" data-code="1">
             距离最近
-            <svg class="sort_icon" v-if="sortByType=='1'" aria-hidden="true">
+            <svg class="sort_icon" v-if="sortByType=='1'" aria-hidden="true" >
               <use xlink:href="#icon-duihao-copy" />
             </svg>
-          </div>
-          <div class="sortItem" :class="{active:sortByType=='2'}" @click="changeSortMethod('2')">
+          </li>
+          <li class="sortItem" :class="{active:sortByType=='2'}" data-code="2">
             销量最高
             <svg class="sort_icon" v-if="sortByType=='2'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
-          </div>
-          <div class="sortItem" :class="{active:sortByType=='3'}" @click="changeSortMethod('3')">
+          </li>
+          <li class="sortItem" :class="{active:sortByType=='3'}" data-code="3">
             起送价最低
             <svg class="sort_icon" v-if="sortByType=='3'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
-          </div>
-          <div class="sortItem" :class="{active:sortByType=='4'}" @click="changeSortMethod('4')">
+          </li>
+          <li class="sortItem" :class="{active:sortByType=='4'}" data-code="4">
             配送速度最快
             <svg class="sort_icon" v-if="sortByType=='4'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
-          </div>
-          <div class="sortItem" :class="{active:sortByType=='5'}" @click="changeSortMethod('5')">
+          </li>
+          <li class="sortItem" :class="{active:sortByType=='5'}" data-code="5">
             评分最高
             <svg class="sort_icon" v-if="sortByType=='5'" aria-hidden="true">
               <use xlink:href="#icon-duihao-copy" />
             </svg>
-          </div>
-        </div>
+          </li>
+        </ul>
       </transition>
        <transition name="slide-fade">
-        <div class="filterItem" v-if="activeType=='filter'" key="filterItem">
+        <div class="filterItem" v-if="activeType=='filter'" >
           <div class="sendMethod">
             <h5>配送方式</h5>
-            <div class="fengniao_send option" @click="selectFilter('fengniao')">
+            <div v-for="item in foodDelivery"  :key="item.id" class="fengniao_send option" @click="chooseDeliveryMode(item.id)">
               <svg class="filter_icon" aria-hidden="true">
-                <use :xlink:href="filterSelected.indexOf('fengniao')>-1?'#icon-duihao-copy':'#icon-fengniao'" />
+                <use :xlink:href="delivery_mode ==item.id ?'#icon-duihao-copy':'#icon-fengniao'" />
               </svg>
-              <span>蜂鸟专送</span>
+              <span>{{item.text}}</span>
             </div>
           </div>
           <div class="businessAttr">
             <h5>商家属性</h5>
             <ul class="clearfix">
-              <li class="attr option" @click="selectFilter('pin')">
-                <svg class="filter_icon" aria-hidden="true" v-if="filterSelected.indexOf('pin') >-1">
+              <li v-for="(item,index) in foodActivity" :key="item.id" class="attr option" @click="chooseFoodActivity(index)">
+                <svg class="filter_icon" aria-hidden="true" v-if="support_ids[index].status">
                   <use xlink:href="#icon-duihao-copy" />
                 </svg>
-                <span v-else class="brand" :style="{color:'rgb(63, 189, 230)',borderColor:'rgb(63, 189, 230)'}">品</span>
-                <span>品牌商家</span>
-              </li>
-              <li class="attr option" @click="selectFilter('wai')">
-                <svg class="filter_icon" aria-hidden="true" v-if="filterSelected.indexOf('wai')>-1">
-                  <use xlink:href="#icon-duihao-copy" />
-                </svg>
-                <span v-else class="brand" :style="{color:'rgb(153, 153, 153)',borderColor:'rgb(153, 153, 153)'}">保</span>
-                <span>外卖保</span>
-              </li>
-              <li class="attr option" @click="selectFilter('zhun')">
-                <svg class="filter_icon" aria-hidden="true" v-if="filterSelected.indexOf('zhun')>-1">
-                  <use xlink:href="#icon-duihao-copy" />
-                </svg>
-                <span v-else class="brand" :style="{color:'rgb(87, 169, 255)',borderColor:'rgb(87, 169, 255)'}">准</span>
-                <span>准时达</span>
-              </li>
-              <li class="attr option" @click="selectFilter('xin')">
-                <svg class="filter_icon" aria-hidden="true" v-if="filterSelected.indexOf('xin')>-1">
-                  <use xlink:href="#icon-duihao-copy" />
-                </svg>
-                <span class="brand" v-else :style="{color:'rgb(232, 132, 45)',borderColor:'rgb(232, 132, 45)'}">新</span>
-                <span>新店</span>
-              </li>
-              <li class="attr option" @click="selectFilter('zai')">
-                <svg class="filter_icon" aria-hidden="true" v-if="filterSelected.indexOf('zai')>-1">
-                  <use xlink:href="#icon-duihao-copy" />
-                </svg>
-                <span v-else class="brand" :style="{color:'rgb(255, 78, 0)',borderColor:'rgb(255, 78, 0)'}">付</span>
-                <span>在线支付</span>
-              </li>
-              <li class="attr option" @click="selectFilter('kai')">
-                <svg class="filter_icon" aria-hidden="true" v-if="filterSelected.indexOf('kai')>-1">
-                  <use xlink:href="#icon-duihao-copy" />
-                </svg>
-                <span v-else class="brand" :style="{color:'rgb(153, 153, 153)',borderColor:'rgb(153, 153, 153)'}">票</span>
-                <span>开发票</span>
+                <span v-else class="brand" :style="{color:'#'+item.icon_color,borderColor:'#'+item.icon_color}">{{item.icon_name}}</span>
+                <span>{{item.name}}</span>
               </li>
             </ul>
           <div class="btn clearfix">
             <div class="removeAll button" @click="clearAll">清空</div>
-            <div class="confirm button" @click="confirm">确认</div>
+            <div class="confirm button" @click="confirm">确认<span v-if="selectedNum >0">({{selectedNum}})</span></div>
           </div>
         </div>
         </div>
       </transition>
     </div>
-     <shop-list class="shoplist" :categoryIds="categoryIds" :sortByType="sortByType" :deliveryMode="deliveryMode" :geohash="geohash"></shop-list>
+     <shop-list class="shoplist"  :restaurant_category_ids='restaurant_category_ids' :restaurant_category_id='restaurant_category_id'  :sortByType="sortByType" :filterConfirmStatus="filterConfirmStatus" :geohash="geohash"></shop-list>
   </div>
 </template>
 
 <script>
 import headerTop from "components/header/header";
 import shopList from "components/common/shoplist";
-import { getCategories } from "service/getData";
-import { mapState } from "vuex";
+import { getCategories,getCityAll,foodDelivery ,foodActivity } from "service/getData";
+import { mapState ,mapMutations} from "vuex";
 
 export default {
   components: {
@@ -192,53 +157,144 @@ export default {
   },
   data() {
     return {
+      geohash:"",
       categories: [],
       activeType: "",
-      curParentCate: {},
-      sort_method: "1",
-      filterSelected:[],
-      deliveryMode:[],
-      categoryIds:"",
-      sortByType:""
+      //一级分类选中的id
+      restaurant_category_id: null,
+      //选中一级分类的子集
+      categoryDetail:[],
+      //二级分类选中的id
+      restaurant_category_ids:null,
+      headTitle:"",
+      foodTitle :"",
+      foodDelivery:[],
+      foodActivity:[],
+      sortByType:"",
+      //筛选选中项的个数
+      selectedNum:0,
+      //选中的配送方式，单选
+      delivery_mode:null,
+      support_ids : [],
+      filterConfirmStatus:false
     };
   },
   computed: {
-    ...mapState(["latitude", "longitude","geohash"])
+    //如果页面刷新，store中的值会全部清空，但是url地址栏中query携带的参数不会丢失，所以geohash应该尽量从地址栏中获取
+    ...mapState(["latitude", "longitude"])
   },
   watch: {},
   methods: {
-    changeSortItem(type) {
-      if (this.activeType === type) {
-        this.activeType = "";
-      } else {
-        this.activeType = type;
+    ...mapMutations({saveAddress:"SAVE_ADDRESS"}),
+  async  initData(){
+      this.geohash = this.$route.query.geohash;
+      this.headTitle = this.$route.query.title;
+      this.foodTitle = this.$route.query.title;
+      this.restaurant_category_id = this.$route.query.restaurant_category_id;
+      if(!this.latitude){
+        const res =await getCityAll(this.geohash);
+        this.saveAddress(res)
       }
+      this.categories=await  getCategories(this.latitude, this.longitude);
+      this.categories.forEach(item =>{
+        if(item.id = this.restaurant_category_id){
+          this.restaurant_category_id = item.id;
+          this.categoryDetail =  item.sub_categories;
+        }
+      });
+      this.foodDelivery = await  foodDelivery(this.latitude, this.longitude)
+      this.foodActivity = await  foodActivity(this.latitude, this.longitude);
+      this.foodActivity.forEach((item,index) =>{
+        this.support_ids[index] ={status:false,id:item.id}
+      })
     },
-    changeSortMethod(num) {
-      this.sortByType = num;
+    changeActiveType(type) {
+      if(this.activeType!= type){
+        this.activeType = type;
+        if(type =="food"){
+          this.foodTitle ="分类"
+        }else{
+          this.foodTitle = this.headTitle;
+        }
+      }else{
+        this.activeType ="";
+        this.foodTitle = this.headTitle;
+      }
+     
+    },
+    selectFirstCate(id,index){
+      if(index ===0){
+        this.restaurant_category_ids = null;
+        this.activeType =""
+        this.categoryDetail = null;
+      }else{
+        this.categoryDetail = this.categories[index]['sub_categories'];
+      }
+      this.restaurant_category_id = id;
+    },
+    changeSortMethod($event) {
+      var target =$event.target;
+      var liNode;
+      if(target.nodeName.toUpperCase()=="LI"){
+          liNode = target;
+      }else{
+        liNode = target.parentNode;
+      }
+      this.activeType ="";
+      //如果只是普通的自定义属性 用getAttribute获取
+      this.sortByType = liNode.dataset.code;
+      // this.sortByType = num;
+      // this.activeType = "";
+    },
+    selectSecondCate(id,name) {
       this.activeType = "";
+      this.foodTitle = this.headTitle =name;
+      this.restaurant_category_ids = id;
     },
-    selectSecondCate(name) {
-      this.activeType = "";
-      this.categoryIds = name;
+    chooseDeliveryMode(id){
+      console.log("num",this.selectedNum);
+      if(this.delivery_mode ===null){
+        console.log(1)
+        this.selectedNum++;
+        this.delivery_mode =id
+      }else if(this.delivery_mode ==id){
+         console.log(2)
+        this.selectedNum--;
+        this.delivery_mode=""
+      }else{
+         console.log(3)
+        this.delivery_mode =id
+      }
+       console.log("num",this.selectedNum);
     },
-    selectFilter(type){
-      let filterSelected = [...this.filterSelected];
-      filterSelected.indexOf(type)>-1 ? filterSelected = filterSelected.filter(item =>item !=type) :filterSelected.push(type);
-      this.filterSelected = filterSelected;  
+    chooseFoodActivity(index){
+        const status = !this.support_ids[index].status;
+        if(status){
+          this.selectedNum++
+        }else{
+          this.selectedNum--;
+        }
+        this.support_ids[index].status =status
+       
+        // this.selectedNum = this.delivery_mode ==null ? 0:1
+        // this.support_ids.forEach(item=>{
+        //     if(item.status){
+        //       this.selectedNum++;
+        //     }
+        // })
     },
     clearAll(){
-      this.filterSelected =[];
+      this.delivery_mode =null;
+      this.selectedNum =0;
+      this.support_ids.map(item=>item.status=false)
     },
     confirm(){
       this.activeType ="";
-      this.deliveryMode = this.filterSelected;
+      this.filterConfirmStatus = !this.filterConfirmStatus;
     }
   },
   created() {
-    getCategories(this.latitude, this.longitude).then(res => {
-      this.categories = res;
-    });
+   this.initData()
   },
   mounted() {}
 };

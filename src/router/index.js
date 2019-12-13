@@ -25,7 +25,7 @@ export default new Router({
         {
           path: '/msite',
           name: 'Msite',
-          component: (r) =>require.ensure([],()=>r(require("../page/msite/msite")),"msite"),
+          component: (r) =>require.ensure([],()=>r(require("../page/msite/msite")),"food"),
           meta:{
             keepAlive:true,
             isBack:false
@@ -51,6 +51,11 @@ export default new Router({
           name: 'Food',
           component: (r) =>require.ensure([],()=>r(require("../page/food")),"food"),
         },
+        {
+          path:"/forget",
+          name:"forget",
+          component:(r) =>require.ensure([],()=>r(require("../page/forget")),"forget")
+        }
       ]
     }
   ]

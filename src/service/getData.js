@@ -54,3 +54,16 @@ export function getCategories(latitude,longitude){
         longitude
     })
 }
+
+export const foodDelivery = (latitude, longitude) => fetch('/shopping/v1/restaurants/delivery_modes', {
+	latitude,
+	longitude,
+	kw: ''
+});
+export const foodActivity = (latitude, longitude) => fetch('/shopping/v1/restaurants/activity_attributes', {
+	latitude,
+	longitude,
+	kw: ''
+});
+export const changePassword = (username, oldpassWord, newpassword, confirmpassword, captcha_code) => fetch('/v2/changepassword', {username, oldpassWord, newpassword, confirmpassword, captcha_code}, 'POST');
+export const getcaptchas = () => fetch('/v1/captchas', {},'POST');

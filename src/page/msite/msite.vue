@@ -29,7 +29,7 @@
             v-for="single in item"
             class="entry"
             :key="single.title"
-            :to="{path:'/food',query:{geohash,title:single.title}}"
+            :to="{path:'/food',query:{geohash,title:single.title,restaurant_category_id:252}}"
           >
             <img :src="imgBaseUrl+single.image_url" alt />
             <div>{{single.title}}</div>

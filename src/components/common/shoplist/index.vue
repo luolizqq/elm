@@ -39,9 +39,9 @@ computed: {
 },
 watch: {},
 props:[
-    "deliveryMode",
+    "restaurant_category_ids",
     "sortByType",
-    "categoryIds"
+    "filterConfirmStatus"
 ],
 methods: {
     getShops(){
@@ -50,7 +50,6 @@ methods: {
             this.shoplist = res;
             this.loading=false;
         },(err=>{
-            console.log(err);
             this.loading= false;
         }))
     }
@@ -69,14 +68,12 @@ watch:{
  sortByType(){
      this.getShops();
  },
- categoryIds(){
+ restaurant_category_ids(){
      this.getShops();
  },
- deliveryMode:{
-     handler:function(){
-     this.getShops();},
-    deep:true
- }  
+ filterConfirmStatus(){
+     this.getShops();
+ } 
 }}
 </script>
 <style lang='scss' scoped>
