@@ -1,12 +1,17 @@
 <!--  -->
 <template>
-<div class=''>
+<div :style="{overflow:'hidden'}">
     <header-top :go-back='true' :head-title='this.currentCityDetail.name'></header-top>
+    <div class="city">
     <div class="form">
-        <input type="text" v-model="address" placeholder="输入学校、商务楼、地址">
-        <input type="submit" value="提交" @click="searchCity">
+        <div class='city_form'>
+            <input type="text" v-model="address" placeholder="输入学校、商务楼、地址">
+        </div>
+        <div class='city_form'>
+            <input type="submit" value="提交" @click="searchCity">
+        </div>
     </div>
-    <div v-if='showHistory'>搜索历史</div>
+    <div v-if='showHistory' class="title">搜索历史</div>
     <div class="result" >
         <div @click="nextPage(item,index)" v-for="(item,index) in placeList"  :key="item.address">
                 <div>{{item.name}}</div>
@@ -16,7 +21,7 @@
     </div>
     <div v-if="placeNone">对不起，搜索历史为空</div>
     <div @click="clearAll" v-if='showHistory && placeList.length>0'>清空所有</div> 
-
+</div>
     <!-- <div class="history" v-if='showHistory'>
         
             <router-link  v-for="item in historyList" :to="'/msite?geohash='+item.geohash" :key="item.address">
@@ -98,5 +103,44 @@ components:{
 }
 </script>
 <style lang='less' scoped>
-
+.city{
+margin-top:2rem;
+.form{
+    padding-top:0.4rem;
+    .city_form{
+        width:90%;
+        margin:0 auto;
+        
+        input[type='text']{
+        width:100%;
+        height:1.4rem;
+        border:1px solid #e4e4e4;
+        border-radius:3px;
+        padding:0 0.3rem;
+        font:0.65rem/1.4rem "Microsoft YaHei";
+        margin-bottom:0.4rem;
+        box-sizing: border-box;
+        &:focus{
+            outline:none;
+        }
+    }
+        input[type="submit"]{
+            width:100%;
+            height:1.4rem;
+            font:0.65rem/1.4rem "Microsoft YaHei";
+            color:#fff;
+            // display: block;
+            background:#3190e8;
+            border-radius:5px;
+        }
+    }
+    }
+    .title{
+       border-bottom: 1px solid #e4e4e4;
+       border-top: 1px solid #e4e4e4;
+       font:0.475rem/0.8rem "Microsoft YaHei";
+        text-align: left;
+        padding-left:0.5rem;
+    }
+}
 </style>
