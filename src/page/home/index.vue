@@ -16,7 +16,7 @@
             </router-link>
         </div>
         <div :class="['hot_city','city']">
-            <div class="title" >热1111门城市111333</div>
+            <div class="title" >热1111门城市111333zqq分支</div>
             <ul class="city_list" >
                 <li v-for='(item) in hotCities' :key="item.pingyin">{{item.name}}</li>
             </ul>
