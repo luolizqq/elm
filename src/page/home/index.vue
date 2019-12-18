@@ -8,7 +8,7 @@
         <div class="locate_city">
             <div class='locate'>
                 <span>当前定位城市：</span>
-                <span>定位不准时,请在城市列表中选择</span>
+                <span>定1111位不准时,请在城市列表中选择</span>
             </div>
             <router-link class='current_city' :to="'/city/'+locateCity.id">
                 <span>{{locateCity.name}}</span>
