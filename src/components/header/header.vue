@@ -1,6 +1,8 @@
 <!--  -->
 <template>
 <div class='wrapper'>
+  {{score}}
+  {{rank.yuwen}}
     <slot name="logo"></slot>
     <slot name="search"></slot>
     <span class="goBack" v-if="goBack" @click="$router.go(-1)">
@@ -29,10 +31,9 @@ export default {
 components: {},
 data() {
 return {
-
 };
 },
-
+inject:["score","rank"],
 watch: {},
 methods: {
     ...mapActions(['queryUserInfo'])
@@ -41,7 +42,10 @@ computed: {
     ...mapState(['userInfo'])
 },
 created() {
+    console.log("rank",this.rank)
+    this.$listeners.change()
 
+    console.log("$listeners",this.$listeners,this.$attrs)
 },
 mounted() {
 
