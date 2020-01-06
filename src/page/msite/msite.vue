@@ -41,6 +41,7 @@
     </div>
     <div class="food_list">
       <div>附近商家</div>
+      <button @click="test.yuwen = '卡卡卡卡';score='888888888888888888888'">安安娜娜{{kk}}</button>
       <ul>
         <li is="shop-list" v-for="(item,index) in shoplist" :key="index">{{item.name}}</li>
       </ul>
@@ -60,8 +61,19 @@ import "../../style/swiper.min.css";
 import { mapState,mapMutations } from "vuex";
 export default {
   components: {},
+  provide(){
+    console.log("tttthis",this.test)
+    return {
+      rank:this.test,
+      score:this.kk
+    }
+  },
   data() {
     return {
+      test:{
+        yuwen:98
+      },
+      kk:80,
       cityAll: {},
       geohash:"",
       indexEntries: [],
