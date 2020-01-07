@@ -33,7 +33,7 @@ data() {
 return {
 };
 },
-inject:["score","rank"],
+// inject:["score","rank"],
 watch: {},
 methods: {
     ...mapActions(['queryUserInfo'])
@@ -42,10 +42,7 @@ computed: {
     ...mapState(['userInfo'])
 },
 created() {
-    console.log("rank",this.rank)
-    this.$listeners.change()
-
-    console.log("$listeners",this.$listeners,this.$attrs)
+    // this.$listeners.change()
 },
 mounted() {
 

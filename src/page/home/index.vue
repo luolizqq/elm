@@ -8,7 +8,7 @@
         <div class="locate_city">
             <div class='locate'>
                 <span>当前定位城市：</span>
-                <span>定1111位不准时,请在城市列表中选择</span>
+                <span>定位不准时,请在城市列表中选择</span>
             </div>
             <router-link class='current_city' :to="'/city/'+locateCity.id">
                 <span>{{locateCity.name}}</span>
@@ -16,7 +16,7 @@
             </router-link>
         </div>
         <div :class="['hot_city','city']">
-            <div class="title" >热1111门城市111333zqq分支</div>
+            <div class="title" >热门城市</div>
 
             <ul class="city_list" >
                 <li v-for='(item) in hotCities' :key="item.pingyin">{{item.name}}</li>
